@@ -44,16 +44,16 @@ export default async function handler(req, res) {
             // img2img - transform the uploaded image
             image: image,
             
-            // VERY STRONG pencil sketch prompt
-            prompt: `SomeeStyle, black and white pencil sketch, graphite drawing, hand-drawn portrait, pencil art, monochrome sketch, detailed pencil shading, crosshatching, sketch lines, pencil texture, traditional drawing, grayscale art, no color, ${prompt || ''}`,
+            // Match the exact style from training images
+            prompt: `SomeeStyle, pure black and white graphite pencil portrait sketch, hand-drawn with pencil on white paper, detailed crosshatching shading, visible pencil strokes, realistic pencil texture, monochrome grayscale drawing, traditional pencil art, sketch lines, no color, ${prompt || ''}`,
             
-            // STRONG negative prompt to prevent color and painting
-            negative_prompt: 'color, colored, painting, oil painting, acrylic painting, watercolor, digital painting, vibrant, colorful, realistic photo, photograph, digital art, 3d render, smooth, polished, modern art, abstract art, cartoon, anime, airbrush, soft painting, colored pencil, pastel, brown tones, sepia, warm colors, orange, red, blue, green, yellow, purple, painted, artistic painting',
+            // Aggressively block ALL color and non-pencil styles
+            negative_prompt: 'color, colored, any color, brown, sepia, beige, tan, orange, red, blue, green, yellow, purple, pink, warm tones, cool tones, tinted, toned, painting, oil painting, acrylic, watercolor, digital painting, digital art, airbrush, smooth painting, rendered, 3d, photorealistic, photograph, modern art, abstract, cartoon, anime, comic, illustration, vector art, flat colors, gradients, soft brush, polished, glossy, shiny',
             
-            // Stronger transformation for pencil effect
-            num_inference_steps: 45,        // Higher for better quality
-            guidance_scale: 9.0,            // HIGHER - follow prompt more strictly
-            strength: 0.80,                 // HIGHER - more transformation to sketch
+            // Settings optimized for pencil sketch transformation
+            num_inference_steps: 50,        // High quality
+            guidance_scale: 10.0,           // VERY strict - force B&W pencil style
+            strength: 0.75,                 // Balance likeness and transformation
             num_outputs: 1,
             scheduler: "DPMSolverMultistep"
           }
