@@ -44,17 +44,16 @@ export default async function handler(req, res) {
             // img2img - transform the uploaded image
             image: image,
             
-            // Strong prompt for pencil sketch style
-            prompt: `SomeeStyle graphite pencil sketch, hand-drawn portrait, detailed pencil shading, black and white sketch art, realistic pencil texture, monochrome drawing, visible pencil strokes, ${prompt || ''}`,
+            // VERY STRONG pencil sketch prompt
+            prompt: `SomeeStyle, black and white pencil sketch, graphite drawing, hand-drawn portrait, pencil art, monochrome sketch, detailed pencil shading, crosshatching, sketch lines, pencil texture, traditional drawing, grayscale art, no color, ${prompt || ''}`,
             
-            // Prevent photorealistic output
-            negative_prompt: 'color, colored, photograph, realistic photo, digital art, painting, oil painting, watercolor, 3d render, cartoon, anime, vibrant, colorful, modern art, smooth, photorealistic',
+            // STRONG negative prompt to prevent color and painting
+            negative_prompt: 'color, colored, painting, oil painting, acrylic painting, watercolor, digital painting, vibrant, colorful, realistic photo, photograph, digital art, 3d render, smooth, polished, modern art, abstract art, cartoon, anime, airbrush, soft painting, colored pencil, pastel, brown tones, sepia, warm colors, orange, red, blue, green, yellow, purple, painted, artistic painting',
             
-            // img2img specific parameters
-            num_inference_steps: 40,        // Higher for better quality
-            guidance_scale: 7.5,            // How closely to follow the prompt
-            strength: 0.75,                 // How much to transform (0.6-0.9)
-                                           // 0.75 = good balance between preserving face and adding sketch effect
+            // Stronger transformation for pencil effect
+            num_inference_steps: 45,        // Higher for better quality
+            guidance_scale: 9.0,            // HIGHER - follow prompt more strictly
+            strength: 0.80,                 // HIGHER - more transformation to sketch
             num_outputs: 1,
             scheduler: "DPMSolverMultistep"
           }
