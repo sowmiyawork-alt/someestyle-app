@@ -41,12 +41,22 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           version: modelVersion,
           input: {
+            // img2img - transform the uploaded image
             image: image,
-            prompt: `SomeeStyle graphite pencil sketch portrait of ${prompt || 'a person'}, hand-drawn black and white art, detailed pencil shading, realistic sketch texture, monochrome portrait drawing, visible pencil strokes`,
-            negative_prompt: 'color, colored, photograph, digital art, realistic photo, painting, oil painting, watercolor, 3d render, cartoon, anime, vibrant, colorful, modern art',
-            num_inference_steps: 35,
-            guidance_scale: 8.0,
-            strength: 0.82
+            
+            // Strong prompt for pencil sketch style
+            prompt: `SomeeStyle graphite pencil sketch, hand-drawn portrait, detailed pencil shading, black and white sketch art, realistic pencil texture, monochrome drawing, visible pencil strokes, ${prompt || ''}`,
+            
+            // Prevent photorealistic output
+            negative_prompt: 'color, colored, photograph, realistic photo, digital art, painting, oil painting, watercolor, 3d render, cartoon, anime, vibrant, colorful, modern art, smooth, photorealistic',
+            
+            // img2img specific parameters
+            num_inference_steps: 40,        // Higher for better quality
+            guidance_scale: 7.5,            // How closely to follow the prompt
+            strength: 0.75,                 // How much to transform (0.6-0.9)
+                                           // 0.75 = good balance between preserving face and adding sketch effect
+            num_outputs: 1,
+            scheduler: "DPMSolverMultistep"
           }
         })
       });
