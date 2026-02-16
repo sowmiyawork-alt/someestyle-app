@@ -41,21 +41,26 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           version: modelVersion,
           input: {
-            // img2img - transform the uploaded image
+            // img2img - preserve the uploaded image structure
             image: image,
             
-            // Match the exact style from training images
-            prompt: `SomeeStyle, pure black and white graphite pencil portrait sketch, hand-drawn with pencil on white paper, detailed crosshatching shading, visible pencil strokes, realistic pencil texture, monochrome grayscale drawing, traditional pencil art, sketch lines, no color, ${prompt || ''}`,
+            // Emphasis on preserving face + adding pencil texture
+            prompt: `SomeeStyle, black and white graphite pencil sketch, hand-drawn portrait, realistic pencil drawing, detailed shading, crosshatching, monochrome, grayscale, pencil texture, sketch on white paper, ${prompt || ''}`,
             
-            // Aggressively block ALL color and non-pencil styles
-            negative_prompt: 'color, colored, any color, brown, sepia, beige, tan, orange, red, blue, green, yellow, purple, pink, warm tones, cool tones, tinted, toned, painting, oil painting, acrylic, watercolor, digital painting, digital art, airbrush, smooth painting, rendered, 3d, photorealistic, photograph, modern art, abstract, cartoon, anime, comic, illustration, vector art, flat colors, gradients, soft brush, polished, glossy, shiny',
+            // Block cartoon, illustration, and color
+            negative_prompt: 'cartoon, comic, illustration, animated, stylized, caricature, exaggerated features, distorted face, color, colored, painting, digital art, airbrush, smooth, vector art, flat shading, cel shading, anime, manga, brown, sepia, orange, red, blue, warm tones',
             
-            // Settings optimized for pencil sketch transformation
+            // CRITICAL: Lower strength to preserve facial features
+            strength: 0.55,                 // LOWER = more face preservation (try 0.5-0.65)
+            guidance_scale: 8.5,            // Balanced
             num_inference_steps: 50,        // High quality
-            guidance_scale: 10.0,           // VERY strict - force B&W pencil style
-            strength: 0.75,                 // Balance likeness and transformation
+            
+            // Additional settings for better results
             num_outputs: 1,
-            scheduler: "DPMSolverMultistep"
+            scheduler: "DPMSolverMultistep",
+            
+            // Try to preserve composition
+            guess_mode: false
           }
         })
       });
